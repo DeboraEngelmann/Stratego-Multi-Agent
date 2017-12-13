@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet href="http://moise.sourceforge.net/xml/os.xsl" type="text/xsl" ?>
+
+<organisational-specification
+    id="timeVermelho"
+    os-version="0.8"
+
+    xmlns='http://moise.sourceforge.net/os'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='http://moise.sourceforge.net/os
+                        http://moise.sourceforge.net/xml/os.xsd' >
+<structural-specification>
+
+<role-definitions>
+	<role id="exercito"/>
+	<role id="equipeDefesa"> <extends role ="exercito"/> </role>
+	<role id="equipeAtaque"> <extends role ="exercito"/> </role>
+    <role id="desarmador"> <extends role ="equipeAtaque"/> </role>
+    <role id="espiao"> <extends role ="equipeAtaque"/> </role>
+    <role id="soldado"> <extends role ="equipeAtaque"/> </role>
+    <role id="general"> <extends role ="equipeDefesa"/> </role>
+    <role id="tenente"> <extends role ="equipeDefesa"/> </role>
+</role-definitions>
+
+<group-specification id="timeVermelho">
+    <roles>
+        <role id="desarmador" min="1" max="2"/>
+	    <role id="espiao" min="1" max="1"/>
+	    <role id="soldado" min="1" max="4"/>
+	    <role id="general" min="1" max="1"/>
+	    <role id="tenente" min="1" max="2"/>
+    </roles>
+
+  	<links>
+       <link from="general" to="tenente" type="authority" scope="intra-group" bi-dir="false"/>
+       <link from="tenente" to="soldado" type="authority" scope="intra-group" bi-dir="false"/>
+       <link from="general" to="desarmador" type="authority" scope="intra-group" bi-dir="false"/>
+       <link from="general" to="espiao" type="authority" scope="intra-group" bi-dir="false"/>
+    </links>
+    
+    
+    <formation-constraints>
+       <compatibility from="exercito" to="exercito" />
+    </formation-constraints>
+</group-specification>
+</structural-specification>
+
+<functional-specification>
+    <scheme id="atacarSch">
+        <goal id="executar_ataque" ds="Executar o ataque">
+            <plan operator="parallel">
+                <goal id="localizar_bomba" ds="localizar a bomba"/>
+               	<goal id="desarmar_bomba" ds="Desarmar bomba"/>
+                <goal id="avancar" ds="Andar uma casa"/>
+            	<goal id="correr" ds="Andar mais de uma casa"/>
+                <goal id="atacar_oponente" ds="Atacar oponente"/>
+                <goal id="recuperar_prisioneiro" ds="vitoria"/>
+            </plan>
+        </goal>
+        <mission id="m1A" min="1" max="2">
+            <goal id="localizar_bomba"/>
+            <goal id="desarmar_bomba"/>
+        </mission>
+       <mission id="m2A" min="1" max="7">
+            <goal id="avancar"/>
+            <goal id="atacar_oponente"/>
+            <goal id="recuperar_prisioneiro"/>
+        </mission>
+        <mission id="m3A" min="1" max="4">
+            <goal id="correr"/>
+        </mission>
+    </scheme>
+  	<scheme id="defenderSch">
+        <goal id="executar_defesa">
+            <plan operator="parallel">
+            	<goal id="recuar" ds="Andar uma casa para trás"/>
+                <goal id="proteger_prisioneiro" ds="Mover-se em direção ao prisioneiro"/>
+            </plan>
+        </goal>
+        <mission id="m1D" min="1" max="3">
+            <goal id="recuar"/>
+            <goal id="proteger_prisioneiro"/>
+        </mission>
+        
+    </scheme>
+</functional-specification>
+
+<normative-specification>
+    <!-- the norms of the application -->
+    <norm id="n1" type="obligation" role="desarmador" mission="m1A"/>
+   	<norm id="n2" type="obligation" role="exercito" mission="m2A"/>
+    <norm id="n3" type="obligation" role="soldado" mission="m3A"/>
+    <norm id="n4" type="obligation" role="equipeDefesa" mission="m1D"/>
+</normative-specification>
+
+</organisational-specification>

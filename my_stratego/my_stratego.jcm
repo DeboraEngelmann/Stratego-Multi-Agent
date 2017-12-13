@@ -1,0 +1,116 @@
+/*
+    my_stratego
+    ---------------------------
+
+    JaCaMo Project File
+
+    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+
+    (see jacamo/doc/jcm.html for more information about what can be defined in this file)
+
+    JaCaMo <VERSION>
+    <DATE>
+*/
+
+mas my_stratego {
+
+    agent desarmadorAzul:desarmador.asl{
+    	instances: 2
+    	beliefs: role(desarmador), forca(3), oponente("timeVermelho")
+    	focus: placar, tabuleiro
+    }
+    
+    agent espiaoAzul:espiao.asl{
+    	instances: 1
+    	beliefs: role(espiao), forca(1), generalAdv(generalVermelho), oponente("timeVermelho")
+    	focus: placar, tabuleiro
+    }
+    
+    agent generalAzul:general.asl{
+    	instances: 1
+    	beliefs: role(general), forca(10), oponente("timeVermelho")
+    	focus: placar, tabuleiro
+    }
+    
+    agent soldadoAzul:soldado.asl{
+    	instances: 4
+    	beliefs: role(soldado), forca(2), oponente("timeVermelho")
+    	focus: placar, tabuleiro
+    }
+    
+    agent tenenteAzul:tenente.asl{
+    	instances: 2
+    	beliefs: role(tenente), forca(5), oponente("timeVermelho")
+    	focus: placar, tabuleiro
+    }
+    agent desarmadorVermelho:desarmador.asl{
+    	instances: 2
+    	beliefs: role(desarmador), forca(3), oponente("timeAzul")
+    	focus: placar, tabuleiro
+    }
+    
+    agent espiaoVermelho:espiao.asl{
+    	instances: 1
+    	beliefs: role(espiao), forca(1), generalAdv(generalAzul), oponente("timeAzul")
+    	focus: placar, tabuleiro
+    }
+    
+    agent generalVermelho:general.asl{
+    	instances: 1
+    	beliefs: role(general), forca(10), oponente("timeAzul")
+    	focus: placar, tabuleiro
+    }
+    
+    agent soldadoVermelho:soldado.asl{
+    	instances: 4
+    	beliefs: role(soldado), forca(2), oponente("timeAzul")
+    	focus: placar, tabuleiro
+    }
+    
+    agent tenenteVermelho:tenente.asl{
+    	instances: 2
+    	beliefs: role(tenente), forca(5), oponente("timeAzul")
+    	focus: placar, tabuleiro
+    }
+    
+    workspace stratego{
+    	artifact placar:my_stratego.Placar(3)
+    	artifact tabuleiro:my_stratego.Tabuleiro()
+    }
+    
+    organisation oTimeAzul: timeAzul.xml{
+    	group timeAzul : timeAzul{
+    		responsible-for:ataqueTimeAzul
+    		players: espiaoAzul espiao,
+    		generalAzul general,
+    		desarmadorAzul desarmador,
+    		soldadoAzul soldado,
+    		tenenteAzul tenente
+    	}
+    	scheme ataqueTimeAzul: atacarSch{
+    	}
+    	scheme defendeTimeAzul: defenderSch{
+    	}    	
+    }
+    
+    organisation oTimeVermelho: timeVermelho.xml{
+    	group timeVermelho : timeVermelho{
+    		responsible-for:ataqueTimeVermelho
+    		players: espiaoVermelho espiao,
+    		generalVermelho general,
+    		desarmadorVermelho desarmador,
+    		soldadoVermelho soldado,
+    		tenenteVermelho tenente
+    	}
+    	scheme ataqueTimeVermelho: atacarSch{
+    	}
+    	scheme defendeTimeVermelho: defenderSch{
+    	}
+    }
+    
+    // agent source path
+    asl-path: src/agt
+              src/agt/inc
+  
+}
+
